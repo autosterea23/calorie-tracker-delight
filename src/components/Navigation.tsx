@@ -8,8 +8,8 @@ const Navigation = () => {
 
   const navItems = [
     { label: "Today", path: "/" },
-    { label: "Weekly", path: "/weekly" },
-    { label: "Monthly", path: "/monthly" }
+    { label: "Trends", path: "/trends" },
+    { label: "Create Food", path: "/create-food" }
   ];
 
   return (

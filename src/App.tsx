@@ -6,8 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Index from "./pages/Index";
-import WeeklyTrends from "./pages/WeeklyTrends";
-import MonthlyTrends from "./pages/MonthlyTrends";
+import NutrientTrends from "./pages/NutrientTrends";
+import CreateFoodItem from "./pages/CreateFoodItem";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,8 +21,8 @@ const App = () => (
         <Navigation />
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/weekly" element={<WeeklyTrends />} />
-          <Route path="/monthly" element={<MonthlyTrends />} />
+          <Route path="/trends" element={<NutrientTrends />} />
+          <Route path="/create-food" element={<CreateFoodItem />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
