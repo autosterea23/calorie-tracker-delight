@@ -25,6 +25,14 @@ const Index = () => {
     Snack: '🍎'
   };
 
+  // Check if it's snack time (weekends or after 5 PM)
+  const isSnackTime = () => {
+    const now = new Date();
+    const isWeekend = now.getDay() === 0 || now.getDay() === 6; // Sunday = 0, Saturday = 6
+    const isEvening = now.getHours() >= 17;
+    return isWeekend || isEvening;
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -110,6 +118,17 @@ const Index = () => {
           <Plus className="h-6 w-6 mr-2" />
           Add Food
         </Button>
+
+        {/* Conditional Snack Reminder */}
+        {isSnackTime() && (
+          <Card className="border border-gray-300 bg-gray-50">
+            <CardContent className="p-4 text-center">
+              <p className="text-sm text-gray-600">
+                Snack time? Don't forget to log it 🍪
+              </p>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       {/* Add Meal Modal */}

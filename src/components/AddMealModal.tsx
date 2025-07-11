@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { X, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -27,6 +27,17 @@ const AddMealModal: React.FC<AddMealModalProps> = ({ isOpen, onClose }) => {
   const { toast } = useToast();
 
   const mealTypes = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+
+  // Filter foods based on selected meal type
+  const filteredFoodItems = useMemo(() => {
+    if (!selectedMealType) return foodItems;
+    return foodItems.filter(item => item.meal_type === selectedMealType);
+  }, [foodItems, selectedMealType]);
+
+  // Reset selected food when meal type changes
+  React.useEffect(() => {
+    setSelectedFood('');
+  }, [selectedMealType]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -132,14 +143,14 @@ const AddMealModal: React.FC<AddMealModalProps> = ({ isOpen, onClose }) => {
             {/* Food Selection */}
             <div className="space-y-2">
               <Label htmlFor="food" className="text-sm font-semibold">
-                Food
+                Food {selectedMealType && `(${selectedMealType} items)`}
               </Label>
-              <Select value={selectedFood} onValueChange={setSelectedFood}>
+              <Select value={selectedFood} onValueChange={setSelectedFood} disabled={!selectedMealType}>
                 <SelectTrigger className="border-2 border-gray-200 rounded-xl">
-                  <SelectValue placeholder="Select food item" />
+                  <SelectValue placeholder={selectedMealType ? "Select food item" : "Select meal type first"} />
                 </SelectTrigger>
                 <SelectContent>
-                  {foodItems.map(food => (
+                  {filteredFoodItems.map(food => (
                     <SelectItem key={food.id} value={food.id}>
                       {food.name} ({food.kcal} kcal per {food.unit})
                     </SelectItem>

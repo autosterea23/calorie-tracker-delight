@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useFoodItems } from '@/hooks/useFoodItems';
 import { useToast } from '@/hooks/use-toast';
 
@@ -21,11 +22,14 @@ const NewFoodForm: React.FC<NewFoodFormProps> = ({ onClose, onSuccess }) => {
     kcal: '',
     carbs_g: '',
     protein_g: '',
-    fat_g: ''
+    fat_g: '',
+    meal_type: ''
   });
 
   const { addFoodItem } = useFoodItems();
   const { toast } = useToast();
+
+  const mealTypes = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -34,10 +38,10 @@ const NewFoodForm: React.FC<NewFoodFormProps> = ({ onClose, onSuccess }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.unit || !formData.kcal) {
+    if (!formData.name || !formData.unit || !formData.kcal || !formData.meal_type) {
       toast({
         title: "Missing Information",
-        description: "Please fill in all required fields (name, unit, calories).",
+        description: "Please fill in all required fields (name, unit, calories, meal type).",
         variant: "destructive"
       });
       return;
@@ -51,7 +55,8 @@ const NewFoodForm: React.FC<NewFoodFormProps> = ({ onClose, onSuccess }) => {
         kcal: parseFloat(formData.kcal) || 0,
         carbs_g: parseFloat(formData.carbs_g) || 0,
         protein_g: parseFloat(formData.protein_g) || 0,
-        fat_g: parseFloat(formData.fat_g) || 0
+        fat_g: parseFloat(formData.fat_g) || 0,
+        meal_type: formData.meal_type as 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack'
       });
 
       onSuccess();
@@ -91,7 +96,7 @@ const NewFoodForm: React.FC<NewFoodFormProps> = ({ onClose, onSuccess }) => {
               id="name"
               value={formData.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
-              placeholder="e.g., Apple, Rice, Chicken Breast"
+              placeholder="e.g., Idli, Rice + Sambar, Masala Chai"
               className="border-2 border-gray-200 rounded-xl"
               required
             />
@@ -122,11 +127,30 @@ const NewFoodForm: React.FC<NewFoodFormProps> = ({ onClose, onSuccess }) => {
                 id="unit"
                 value={formData.unit}
                 onChange={(e) => handleInputChange('unit', e.target.value)}
-                placeholder="piece, cup, g"
+                placeholder="pcs, cup, ml, serving"
                 className="border-2 border-gray-200 rounded-xl"
                 required
               />
             </div>
+          </div>
+
+          {/* Meal Type */}
+          <div className="space-y-2">
+            <Label htmlFor="meal_type" className="text-sm font-semibold">
+              Meal Type *
+            </Label>
+            <Select value={formData.meal_type} onValueChange={(value) => handleInputChange('meal_type', value)}>
+              <SelectTrigger className="border-2 border-gray-200 rounded-xl">
+                <SelectValue placeholder="Select meal type" />
+              </SelectTrigger>
+              <SelectContent>
+                {mealTypes.map(type => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Calories */}

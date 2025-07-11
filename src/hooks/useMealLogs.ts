@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 
 export interface FoodItem {
@@ -10,6 +9,7 @@ export interface FoodItem {
   carbs_g: number;
   protein_g: number;
   fat_g: number;
+  meal_type: 'Breakfast' | 'Lunch' | 'Dinner' | 'Snack';
 }
 
 export interface MealLog {
